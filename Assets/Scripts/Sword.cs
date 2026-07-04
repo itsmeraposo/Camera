@@ -14,9 +14,17 @@ public class Sword : MonoBehaviour
 
     public void Attack()
     {
+        PlayAnimation("AnimacaoFaca 0");
+    }
+
+    //  COMBO: toca o estado de animação correspondente ao golpe atual do combo
+    // transitionTime = tempo do "blend" suave entre a animação atual e a nova (em segundos)
+    public void PlayAnimation(string stateName, float transitionTime = 0.1f)
+    {
         if (animator != null)
         {
-            animator.Play("AnimacaoFaca 0");
+            // CrossFade mistura suavemente a animação atual com a nova, ao invés de cortar seco
+            animator.CrossFade(stateName, transitionTime, 0, 0f);
         }
     }
 
@@ -30,7 +38,7 @@ public class Sword : MonoBehaviour
         {
             enemy.TakeDamage(damage);
 
-            // 🔥 FLASK: cura o player se o efeito de fúria estiver ativo
+            //  FLASK: cura o player se o efeito de fúria estiver ativo
             playerFlask?.OnAcertarInimigo();
             return;
         }

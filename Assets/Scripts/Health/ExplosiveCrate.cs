@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class ExplosiveCrate : MonoBehaviour
 {
     public float health = 30f;          // Vida da caixa
     public float damage = 15f;          // Dano ao player
     public float radius = 3f;           // Raio da explosão
-    public ParticleSystem explosionEffect;
+    public VisualEffect explosionEffect; // 🔥 Agora aceita VFX Graph
 
-    // 🔥 Método chamado pela espada (Sword.cs)
+    //  Método chamado pela espada (Sword.cs)
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
@@ -21,7 +22,7 @@ public class ExplosiveCrate : MonoBehaviour
 
     void Explode()
     {
-        // 🔥 SOM DE EXPLOSÃO (índice 8) via AudioController
+        //  SOM DE EXPLOSÃO (índice 8) via AudioController
         FindObjectOfType<AudioController>()?.TocarEfeito(8);
 
         // Verifica se o player está dentro do raio

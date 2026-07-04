@@ -7144,7 +7144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac6920ab75397d441abc3049520c3628, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.26557657
+      value: 0.2655766
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac6920ab75397d441abc3049520c3628, type: 3}
       propertyPath: m_LocalPosition.z
@@ -14037,7 +14037,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81d7b53aa49f774a83ebae3674c095c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  cooldown: 2
+  comboDamage:
+  - 10
+  - 15
+  - 25
+  comboAnimations:
+  - AnimacaoFaca 0
+  - Ataque2
+  - AnimacaoFaca 0
+  comboDuration:
+  - 1
+  - 1.4
+  - 1
+  comboWindow: 0.8
+  transicaoEntreGolpes: 0.1
   sword: {fileID: 0}
 --- !u!114 &1540034594
 MonoBehaviour:
