@@ -19,6 +19,7 @@ public class PlayerFlask : MonoBehaviour
 
     [Header("Efeito Visual (VFX Graph)")]
     public VisualEffect vfxFuria; // Arraste o Visual Effect da Faca aqui
+    public VisualEffect vfxAura; // Arraste o Visual Effect da Aura do Player aqui (separado da faca)
 
     [Header("UI")]
     public TextMeshProUGUI flaskStatusText;
@@ -52,6 +53,9 @@ public class PlayerFlask : MonoBehaviour
 
         if (vfxFuria != null)
             vfxFuria.Stop();
+
+        if (vfxAura != null)
+            vfxAura.Stop();
     }
 
     void Update()
@@ -122,6 +126,9 @@ public class PlayerFlask : MonoBehaviour
         if (vfxFuria != null)
             vfxFuria.Play();
 
+        if (vfxAura != null)
+            vfxAura.Play();
+
         // Aplica tamanho da faca
         if (sword != null)
             sword.transform.localScale = escalaOriginalFaca * multiplicadorTamanhoFaca;
@@ -141,6 +148,9 @@ public class PlayerFlask : MonoBehaviour
 
         if (vfxFuria != null)
             vfxFuria.Stop();
+
+        if (vfxAura != null)
+            vfxAura.Stop();
 
         efeitoAtivo = false;
         TempoRestante = 0f;

@@ -3,12 +3,14 @@ using UnityEngine.VFX;
 
 public class ExplosiveCrate : MonoBehaviour
 {
-    public float health = 30f;          // Vida da caixa
-    public float damage = 15f;          // Dano ao player
-    public float radius = 3f;           // Raio da explosão
-    public VisualEffect explosionEffect; // 🔥 Agora aceita VFX Graph
+    [Header("Configurações")]
+    public float health = 30f;
+    public float damage = 15f;
+    public float radius = 3f;
 
-    //  Método chamado pela espada (Sword.cs)
+    [Header("Efeitos")]
+    public GameObject explosionPrefab; // Arraste o prefab da explosão aqui
+
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
@@ -22,17 +24,20 @@ public class ExplosiveCrate : MonoBehaviour
 
     void Explode()
     {
-        //  SOM DE EXPLOSÃO (índice 8) via AudioController
+        // Som da explosão
         FindObjectOfType<AudioController>()?.TocarEfeito(8);
 
-        // Verifica se o player está dentro do raio
+        // Dano ao jogador
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player != null)
         {
             float distance = Vector3.Distance(transform.position, player.transform.position);
+
             if (distance <= radius)
             {
                 PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(damage);
@@ -41,15 +46,33 @@ public class ExplosiveCrate : MonoBehaviour
             }
         }
 
-        // Efeito de partículas (se tiver)
-        if (explosionEffect != null)
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        // Instancia o prefab da explosão
+        if (explosionPrefab != null)
+        {
+            GameObject explosion = Instantiate(
+                explosionPrefab,
+                transform.position,
+                Quaternion.identity
+            );
 
-        // Destroi a caixa
+            // Procura o VisualEffect no prefab
+            VisualEffect vfx = explosion.GetComponent<VisualEffect>();
+
+            if (vfx == null)
+                vfx = explosion.GetComponentInChildren<VisualEffect>();
+
+            if (vfx != null)
+                vfx.Play();
+
+            // Destrói o objeto da explosão após 2 segundos
+            Destroy(explosion, 2f);
+        }
+
+        // Destrói a caixa
         Destroy(gameObject);
     }
 
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radius);
