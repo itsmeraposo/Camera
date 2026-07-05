@@ -8,13 +8,17 @@ public class EnemyGroup : MonoBehaviour
     {
         if (GameObject.FindGameObjectWithTag("Enemy") == null)
         {
-            // 🔥 SOM DE PORTA ABRINDO (índice 18)
-            FindObjectOfType<AudioController>()?.TocarEfeito(18);
-
-            // Se houver uma porta referenciada, destrua-a (ou abra)
+            // Se houver uma porta referenciada, abre com animação (ou destrói, se não tiver o script)
             if (portaParaAbrir != null)
             {
-                Destroy(portaParaAbrir);
+                DoorController porta = portaParaAbrir.GetComponent<DoorController>();
+                if (porta != null)
+                    porta.Abrir();
+                else
+                {
+                    FindObjectOfType<AudioController>()?.TocarEfeito(18);
+                    Destroy(portaParaAbrir);
+                }
             }
 
             // Destroi o grupo de inimigos

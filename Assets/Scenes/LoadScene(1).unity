@@ -9596,6 +9596,51 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1432102796}
   m_SourcePrefab: {fileID: 100100000, guid: 16626651375b1b943bab6d6879c5ceba, type: 3}
+--- !u!1 &943991273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 943991275}
+  - component: {fileID: 943991274}
+  m_Layer: 0
+  m_Name: GerenciadorInimigos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &943991274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943991273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a25914f22a3a2a43a15c1d7dc59835b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyGroup
+  portaParaAbrir: {fileID: 1589619710}
+--- !u!4 &943991275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943991273}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 68.3, y: 22.10789, z: 318.15338}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984239637
 GameObject:
   m_ObjectHideFlags: 0
@@ -15521,7 +15566,8 @@ GameObject:
   - component: {fileID: 1589619713}
   - component: {fileID: 1589619712}
   - component: {fileID: 1589619711}
-  - component: {fileID: 1589619715}
+  - component: {fileID: 1589619717}
+  - component: {fileID: 1589619716}
   m_Layer: 0
   m_Name: "Porta Destru\xEDvel"
   m_TagString: Untagged
@@ -15616,13 +15662,35 @@ Transform:
   m_GameObject: {fileID: 1589619710}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 69.1, y: 9.8, z: 310.7}
-  m_LocalScale: {x: 0, y: 25, z: 20}
+  m_LocalPosition: {x: 69.8, y: 9.8, z: 310.7}
+  m_LocalScale: {x: 2, y: 25, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1589619715
+--- !u!95 &1589619716
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589619710}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3d8281e718730fa43b9f9262d4b0c5c8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1589619717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15631,10 +15699,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1589619710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a25914f22a3a2a43a15c1d7dc59835b, type: 3}
+  m_Script: {fileID: 11500000, guid: 87dfac26a28069044b2d34cd5a79494a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyGroup
-  portaParaAbrir: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::DoorController
+  animator: {fileID: 1589619716}
+  nomeDoTrigger: Abrir
+  colisorDaPorta: {fileID: 1589619711}
+  tempoParaLiberarColisao: 1
+  indiceSomAbrindo: 18
 --- !u!1 &1598615603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4627d2d5e75ad4347836970f094bdb4f, type: 3}
@@ -17273,6 +17345,7 @@ MonoBehaviour:
   recordeAtualText: {fileID: 1154295930}
   proximaFase: LoadScene(2)
   nextPhaseButton: {fileID: 1490568553}
+  primeiraFase: LoadScene(1)
   corNormal: {r: 1, g: 1, b: 1, a: 1}
   corAviso: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   corPerigo: {r: 1, g: 0, b: 0, a: 1}
@@ -19363,6 +19436,8 @@ GameObject:
   - component: {fileID: 2131064142}
   - component: {fileID: 2131064141}
   - component: {fileID: 2131064144}
+  - component: {fileID: 2131064145}
+  - component: {fileID: 2131064146}
   m_Layer: 0
   m_Name: Porta com Chave
   m_TagString: Untagged
@@ -19437,7 +19512,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 36, y: 8.4, z: 187.8}
-  m_LocalScale: {x: 0, y: 25, z: 20}
+  m_LocalScale: {x: 3, y: 25, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -19463,6 +19538,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0, y: 1.0000001, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &2131064145
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131064139}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f56fce3c12b89154da66fb121e9162b8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2131064146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131064139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87dfac26a28069044b2d34cd5a79494a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorController
+  animator: {fileID: 2131064145}
+  nomeDoTrigger: Abrir
+  colisorDaPorta: {fileID: 2131064144}
+  tempoParaLiberarColisao: 2
+  indiceSomAbrindo: 18
 --- !u!1 &2132497871 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 16626651375b1b943bab6d6879c5ceba, type: 3}
@@ -19644,3 +19758,4 @@ SceneRoots:
   - {fileID: 295129056}
   - {fileID: 915714995}
   - {fileID: 562752753}
+  - {fileID: 943991275}
