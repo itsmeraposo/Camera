@@ -17050,7 +17050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380d77f65b29b7149b83bc2bd1e97286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BananaPowerup
-  bonusSpeed: 5
+  bonusSpeed: 10
   duration: 10
 --- !u!65 &1838439154
 BoxCollider:
