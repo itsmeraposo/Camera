@@ -92,7 +92,7 @@ public class PlayerFlask : MonoBehaviour
             else if (!podeUsar)
                 flaskStatusText.text = $"Recarregando: {CooldownRestante:0.0}s";
             else
-                flaskStatusText.text = "Flask Pronta!";
+                flaskStatusText.text = "A Barra está Pronta: Ative Já!";
         }
 
         if (flaskBar != null)

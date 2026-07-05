@@ -16038,6 +16038,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f9e8bbf9fd081364ab5f3d6b453c7361, type: 3}
   - {fileID: 8300000, guid: 1971a200be22366499f4f91dd02e8eee, type: 3}
   - {fileID: 8300000, guid: a58b29f75af7a4c4da1f99226be3d5c7, type: 3}
+  - {fileID: 8300000, guid: 3351d310d65aa8b48a2e2abf0cd38c78, type: 3}
   mixer: {fileID: 24100000, guid: 98bfca5abbe5a1f42bc23c7eb6b26345, type: 2}
   sliderMusica: {fileID: 1170651959}
   sliderEfeitos: {fileID: 1449455837}
