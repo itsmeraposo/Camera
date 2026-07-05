@@ -7,9 +7,14 @@ public class CaixaSpawn : MonoBehaviour
     public int quantidadeInimigos = 2;
     public float raioSpawn = 2f;
 
-    // Chamado pelo StatusThings quando a caixa morre
-    void OnDestroy()
+    private bool jaSpawnou = false;
+
+    // Chamado explicitamente pelo StatusThings quando a caixa realmente morre por dano
+    public void SpawnInimigos()
     {
+        if (jaSpawnou) return;
+        jaSpawnou = true;
+
         if (inimigoPrefab == null) return;
 
         for (int i = 0; i < quantidadeInimigos; i++)

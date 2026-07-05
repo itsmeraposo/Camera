@@ -13,6 +13,14 @@ public class StatusThings : MonoBehaviour
         {
             //  SOM DE CAIXA (índice 0)
             FindObjectOfType<AudioController>()?.TocarEfeito(0);
+
+            // Spawna os inimigos aqui, explicitamente, só quando a caixa realmente morre por dano
+            CaixaSpawn caixaSpawn = GetComponent<CaixaSpawn>();
+            if (caixaSpawn != null)
+            {
+                caixaSpawn.SpawnInimigos();
+            }
+
             Destroy(gameObject);
         }
     }
