@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI recordeText;
     public TextMeshProUGUI recordeAtualText;
 
+    [Header("Próxima Fase")]
+    public string proximaFase; // nome exato da próxima cena (no Build Settings). Deixe vazio se essa for a última fase.
+    public Button nextPhaseButton; // botão "Próxima Fase" no Victory Panel
+    public string primeiraFase = "LoadScene(1)"; // usado só quando "proximaFase" está vazio: o botão Restart vira "Jogar Novamente" e volta pra essa cena
+
     [Header("Cores do Timer")]
     public Color corNormal = Color.white;
     public Color corAviso = Color.yellow;   // abaixo de 60s
@@ -154,12 +159,16 @@ public class GameManager : MonoBehaviour
 
         float tempoUsado = tempoLimite - tempoRestante;
 
-        float melhorTempo = PlayerPrefs.GetFloat("MelhorTempo", float.MaxValue);
+        // Chave única por cena, pra cada fase guardar seu próprio recorde
+        // (antes usava "MelhorTempo" fixo, então todas as fases compartilhavam o mesmo).
+        string chaveRecorde = "MelhorTempo_" + SceneManager.GetActiveScene().name;
+
+        float melhorTempo = PlayerPrefs.GetFloat(chaveRecorde, float.MaxValue);
         bool novoRecorde = tempoUsado < melhorTempo;
 
         if (novoRecorde)
         {
-            PlayerPrefs.SetFloat("MelhorTempo", tempoUsado);
+            PlayerPrefs.SetFloat(chaveRecorde, tempoUsado);
             PlayerPrefs.Save();
             melhorTempo = tempoUsado;
         }
@@ -195,9 +204,33 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
 
         if (restartButton != null)
-            restartButton.onClick.AddListener(RestartGame);
+        {
+            bool ultimaFase = string.IsNullOrEmpty(proximaFase);
+
+            // Na última fase, o botão vira "Jogar Novamente" e volta pra Fase 1.
+            // Nas fases com próxima definida, continua reiniciando a fase atual.
+            restartButton.onClick.AddListener(ultimaFase ? (UnityEngine.Events.UnityAction)JogarNovamente : RestartGame);
+
+            if (ultimaFase)
+            {
+                TextMeshProUGUI restartLabel = restartButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (restartLabel != null)
+                    restartLabel.text = "Jogar Novamente";
+            }
+        }
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(GoToMainMenu);
+
+        // Só mostra o botão "Próxima Fase" se essa cena tiver uma próxima definida.
+        // Se "proximaFase" estiver vazio (ex: última fase do jogo), o botão some sozinho.
+        if (nextPhaseButton != null)
+        {
+            bool temProximaFase = !string.IsNullOrEmpty(proximaFase);
+            nextPhaseButton.gameObject.SetActive(temProximaFase);
+
+            if (temProximaFase)
+                nextPhaseButton.onClick.AddListener(AvancarFase);
+        }
     }
 
     void Derrota()
@@ -230,6 +263,19 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // Usado só pelo botão de Restart na tela de vitória da ÚLTIMA fase — volta pro início do jogo.
+    void JogarNovamente()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(primeiraFase);
+    }
+
+    void AvancarFase()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(proximaFase);
     }
 
     void GoToMainMenu()
