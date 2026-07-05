@@ -32,6 +32,9 @@ public class PlayerAttack : MonoBehaviour
 
     private bool usarSomAlternativo = false;
 
+    // Exposto pra Sword.cs saber se deve causar dano agora ou ignorar o toque
+    public bool EstaAtacando => isAttacking;
+
     void Start()
     {
         sword = GetComponentInChildren<Sword>();

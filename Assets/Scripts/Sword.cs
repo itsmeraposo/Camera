@@ -5,11 +5,13 @@ public class Sword : MonoBehaviour
     public float damage = 10f;
     private Animator animator;
     private PlayerFlask playerFlask;
+    private PlayerAttack playerAttack;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         playerFlask = GetComponentInParent<PlayerFlask>();
+        playerAttack = GetComponentInParent<PlayerAttack>();
     }
 
     public void Attack()
@@ -30,6 +32,11 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        // Só causa dano se o jogador estiver realmente no meio de um golpe
+        // (evita dano só por encostar a espada em algo sem atacar).
+        if (playerAttack != null && !playerAttack.EstaAtacando)
+            return;
+
         Debug.Log("Collidiu com " + collision.gameObject.name);
 
         // 1. INIMIGO
