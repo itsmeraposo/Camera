@@ -35,9 +35,12 @@ public class PlayerAttack : MonoBehaviour
     // Exposto pra Sword.cs saber se deve causar dano agora ou ignorar o toque
     public bool EstaAtacando => isAttacking;
 
+    private RatoAnimator rato;
+
     void Start()
     {
         sword = GetComponentInChildren<Sword>();
+        rato = FindFirstObjectByType<RatoAnimator>();
     }
 
     void Update()
@@ -81,6 +84,9 @@ public class PlayerAttack : MonoBehaviour
             sword.damage = comboDamage[index];
             sword.PlayAnimation(comboAnimations[index], transicaoEntreGolpes);
         }
+
+        // Soco do rato (animação + janela de dano na mão)
+        rato?.Soco(comboDamage[index]);
 
         TocarSom();
 
