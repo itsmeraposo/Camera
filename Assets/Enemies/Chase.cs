@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))] // Adiciona o NavMeshAgent automaticamente
 public class Chase : MonoBehaviour
 {
     private GameObject player;
@@ -11,19 +12,30 @@ public class Chase : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        agent = GetComponent<NavMeshAgent>();
+        // Mostra no Console em qual objeto este script está
+        Debug.Log("Chase está no objeto: " + gameObject.name);
 
+        // Busca o player pela tag
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
             Debug.LogError("Nenhum objeto com a tag 'Player' foi encontrado na cena!");
 
+        // Busca o NavMeshAgent no mesmo GameObject
+        agent = GetComponent<NavMeshAgent>();
         if (agent == null)
             Debug.LogError("O componente NavMeshAgent está faltando neste GameObject!");
+        else
+            Debug.Log("NavMeshAgent encontrado com sucesso!");
+
+        // Verifica se está em cima de um NavMesh válido
+        if (agent != null && !agent.isOnNavMesh)
+            Debug.LogWarning("O inimigo NÃO está em cima do NavMesh! Faça o Bake no chão (Window → AI → Navigation → Bake) e mova o inimigo para a área azul.");
     }
 
     void Update()
     {
         if (player == null || agent == null) return;
+        if (!agent.isOnNavMesh) return; // evita erro se não estiver no NavMesh
 
         float distancia = Vector3.Distance(transform.position, player.transform.position);
 

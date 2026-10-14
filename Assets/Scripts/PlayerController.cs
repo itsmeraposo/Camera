@@ -16,6 +16,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Áudio de Passos")]
     public AudioSource passoSource;
+    public int indicePassoAndar = 16;
+    public int indicePassoCorrer = 23;
+    public float intervalAndar = 0.5f;
+    public float intervalCorrer = 0.3f;
+
+    [Header("Pitch dos Passos")]
+    public float pitchAndar = 0.95f;
+    public float pitchCorrer = 1.15f;
+    public float variacaoPitch = 0.05f;
 
     private Rigidbody rb;
     private float yaw;
@@ -23,6 +32,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool jumpRequested;
     private float currentSpeed;
+    private float proximoPasso;
+    private AudioController audioController;
 
     void Awake()
     {
@@ -38,10 +49,10 @@ public class PlayerController : MonoBehaviour
             passoSource.volume = 0.5f;
         }
 
-        AudioController audio = FindObjectOfType<AudioController>();
-        if (audio != null && audio.efeitoSource != null)
+        audioController = FindObjectOfType<AudioController>();
+        if (audioController != null && audioController.efeitoSource != null)
         {
-            passoSource.outputAudioMixerGroup = audio.efeitoSource.outputAudioMixerGroup;
+            passoSource.outputAudioMixerGroup = audioController.efeitoSource.outputAudioMixerGroup;
         }
     }
 
@@ -71,27 +82,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         HandleJumpInput();
         HandleSprint();
-
-        // 🔥 SONS DE PASSOS
-        float velocidadeHorizontal = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
-
-        if (isGrounded && velocidadeHorizontal > 0.1f)
-        {
-            if (!passoSource.isPlaying)
-            {
-                AudioController audio = FindObjectOfType<AudioController>();
-                if (audio != null && audio.efeitos.Length > 16 && audio.efeitos[16] != null)
-                {
-                    passoSource.clip = audio.efeitos[16];
-                    passoSource.Play();
-                }
-            }
-        }
-        else
-        {
-            if (passoSource.isPlaying)
-                passoSource.Stop();
-        }
+        HandleFootsteps();
     }
 
     void FixedUpdate()
@@ -102,6 +93,43 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
         ApplyMovement();
         ApplyJump();
+    }
+
+    // 🔊 Lógica dos sons de passos
+    void HandleFootsteps()
+    {
+        float velocidadeHorizontal = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
+        bool correndo = Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed;
+
+        if (isGrounded && velocidadeHorizontal > 0.1f)
+        {
+            // Escolhe o índice do clip conforme estado
+            int indiceClip = correndo ? indicePassoCorrer : indicePassoAndar;
+            float pitchBase = correndo ? pitchCorrer : pitchAndar;
+            float intervalo = correndo ? intervalCorrer : intervalAndar;
+
+            if (Time.time >= proximoPasso)
+            {
+                if (audioController != null &&
+                    audioController.efeitos != null &&
+                    audioController.efeitos.Length > indiceClip &&
+                    audioController.efeitos[indiceClip] != null)
+                {
+                    passoSource.clip = audioController.efeitos[indiceClip];
+                    passoSource.pitch = pitchBase + Random.Range(-variacaoPitch, variacaoPitch);
+                    passoSource.Play();
+
+                    proximoPasso = Time.time + intervalo;
+                }
+            }
+        }
+        else
+        {
+            if (passoSource.isPlaying)
+                passoSource.Stop();
+
+            proximoPasso = 0f;
+        }
     }
 
     void HandleMouseLook()
@@ -181,7 +209,7 @@ public class PlayerController : MonoBehaviour
             jumpRequested = false;
 
             // 🔥 SOM DE PULO (índice 19)
-            FindObjectOfType<AudioController>()?.TocarEfeito(19);
+            audioController?.TocarEfeito(19);
         }
     }
 }

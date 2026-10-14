@@ -13,6 +13,13 @@ public class EnemySensor : MonoBehaviour
     [Range(0, 360)]
     public float viewAngle = 90f;
 
+    [Header("Player pequeno (rato)")]
+    [Tooltip("Dentro desta distância (no chão) o inimigo percebe o player mesmo fora do ângulo de visão, se não houver parede no meio")]
+    public float closeSenseRadius = 1.5f;
+    [Tooltip("Também lança um raio de baixo, para o rato baixinho não sumir atrás de objetos baixos")]
+    public bool usarRaioBaixo = true;
+    public float alturaRaioBaixo = 0.3f;
+
     [Header("Optional SphereCast")]
     public float sphereRadius = 0.35f;
 
@@ -39,14 +46,40 @@ public class EnemySensor : MonoBehaviour
         if (direction.magnitude > viewDistance)
             return false;
 
-        float angle = Vector3.Angle(transform.forward, direction.normalized);
+        // Ângulo e distância medidos no plano do chão (ignora a diferença de altura).
+        // Antes, com o player baixo e perto, a direção apontava para baixo e ele
+        // saía do cone de visão ("sumia" quando chegava perto).
+        Vector3 flatDir = direction;
+        flatDir.y = 0f;
+        Vector3 flatForward = transform.forward;
+        flatForward.y = 0f;
 
-        if (angle > viewAngle / 2f)
-            return false;
+        bool muitoPerto = flatDir.magnitude <= closeSenseRadius;
+
+        if (!muitoPerto && flatDir.sqrMagnitude > 0.0001f && flatForward.sqrMagnitude > 0.0001f)
+        {
+            float angle = Vector3.Angle(flatForward, flatDir);
+
+            if (angle > viewAngle / 2f)
+                return false;
+        }
 
         // Se existe obstáculo entre o inimigo e o jogador, não vê.
-        if (Physics.Linecast(origin, target, obstacleMask))
-            return false;
+        bool bloqueadoAlto = Physics.Linecast(origin, target, obstacleMask);
+
+        if (bloqueadoAlto)
+        {
+            bool bloqueadoBaixo = true;
+
+            if (usarRaioBaixo)
+            {
+                Vector3 baixo = transform.position + Vector3.up * alturaRaioBaixo;
+                bloqueadoBaixo = Physics.Linecast(baixo, target, obstacleMask);
+            }
+
+            if (bloqueadoBaixo)
+                return false;
+        }
 
         LastKnownPosition = player.position;
         return true;

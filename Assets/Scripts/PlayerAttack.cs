@@ -86,7 +86,10 @@ public class PlayerAttack : MonoBehaviour
         }
 
         // Soco do rato (animação + janela de dano na mão)
-        rato?.Soco(comboDamage[index]);
+        if (rato == null)
+            Debug.LogWarning("[PlayerAttack] Nenhum RatoAnimator encontrado na cena: o soco do rato não é chamado.");
+        else
+            rato.Soco(comboDamage[index]);
 
         TocarSom();
 
