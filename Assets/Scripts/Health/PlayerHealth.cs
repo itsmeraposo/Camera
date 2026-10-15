@@ -6,7 +6,16 @@ public class PlayerHealth : MonoBehaviour
     [Header("Vida")]
     public float maxHealth = 100f;
 
+    [Header("Animação de dano")]
+    [Tooltip("Deixe vazio para procurar o Animator do rato automaticamente")]
+    public Animator animator;
+    [Tooltip("Nome do Trigger no Animator")]
+    public string hitTrigger = "Hit";
+    [Tooltip("Tempo mínimo entre uma animação de dano e outra (evita ficar travado tomando hit)")]
+    public float hitCooldown = 0.4f;
+
     private float currentHealth;
+    private float lastHitTime = -999f;
 
     public System.Action<float, float> OnHealthChanged;
 
@@ -17,6 +26,12 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        if (animator == null)
+            Debug.LogWarning("[PlayerHealth] Nenhum Animator encontrado: arraste o Animator do rato no campo Animator.");
     }
 
     public void TakeDamage(float damage)
@@ -40,6 +55,29 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+        else
+        {
+            PlayHitAnimation();
+        }
+    }
+
+    void PlayHitAnimation()
+    {
+        if (animator == null) return;
+        if (Time.time - lastHitTime < hitCooldown) return;
+        if (!HasParameter(hitTrigger)) return;
+
+        lastHitTime = Time.time;
+        animator.SetTrigger(hitTrigger);
+    }
+
+    bool HasParameter(string paramName)
+    {
+        foreach (AnimatorControllerParameter p in animator.parameters)
+            if (p.name == paramName && p.type == AnimatorControllerParameterType.Trigger)
+                return true;
+
+        return false;
     }
 
     // 🔥 NOVO: Cura o jogador (usado pelo Flask de Fúria)
