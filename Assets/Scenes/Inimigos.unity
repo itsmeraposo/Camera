@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c67aac1e8b524d548880b7af391ebf1a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c67aac1e8b524d548880b7af391ebf1a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5092,6 +5092,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
+  dieTrigger: Die
+  deathDelay: 2.5
   animator: {fileID: 0}
   hitTrigger: Hit
   hitCooldown: 0.4
@@ -5224,7 +5226,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.35
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -5298,12 +5300,12 @@ Transform:
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1633146836}
   - {fileID: 1647205652}
   - {fileID: 1873754518}
   - {fileID: 1472268668}
   - {fileID: 1791596309}
   - {fileID: 1306512023}
-  - {fileID: 1633146836}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &1861127524

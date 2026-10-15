@@ -6,6 +6,12 @@ public class PlayerHealth : MonoBehaviour
     [Header("Vida")]
     public float maxHealth = 100f;
 
+    [Header("Morte")]
+    [Tooltip("Nome do Trigger de morte no Animator")]
+    public string dieTrigger = "Die";
+    [Tooltip("Tempo (segundos) para a animação de morte aparecer antes de recarregar a cena / mostrar a tela de morte")]
+    public float deathDelay = 2.5f;
+
     [Header("Animação de dano")]
     [Tooltip("Deixe vazio para procurar o Animator do rato automaticamente")]
     public Animator animator;
@@ -101,7 +107,41 @@ public class PlayerHealth : MonoBehaviour
         // 🔥 SOM DE MORTE DO JOGADOR (índice 14 - Morte)
         FindObjectOfType<AudioController>()?.TocarEfeito(14);
 
-        Debug.Log("Jogador morreu! Recarregando cena...");
+        Debug.Log("Jogador morreu!");
+
+        StopPlayerControl();
+
+        // Animação de morte
+        if (animator != null && HasParameter(dieTrigger))
+        {
+            animator.ResetTrigger(hitTrigger);
+            animator.SetTrigger(dieTrigger);
+        }
+
+        StartCoroutine(AfterDeath());
+    }
+
+    // Desliga movimento, ataque etc. para o rato não andar enquanto morre
+    void StopPlayerControl()
+    {
+        foreach (MonoBehaviour script in GetComponents<MonoBehaviour>())
+        {
+            if (script != this)
+                script.enabled = false;
+        }
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+
+    System.Collections.IEnumerator AfterDeath()
+    {
+        // Espera a animação de morte aparecer
+        yield return new WaitForSeconds(deathDelay);
 
         if (!useDeathScreen)
         {
