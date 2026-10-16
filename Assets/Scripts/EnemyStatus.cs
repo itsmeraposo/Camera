@@ -19,6 +19,11 @@ public class EnemyStatus : MonoBehaviour
     [Tooltip("Se não houver animação de morte, o corpo some depois deste tempo curto")]
     public float destroyDelayWithoutAnimation = 0.1f;
 
+    [Tooltip("Mantém o corpo encostado no chão durante a animação de morte (resolve o corpo flutuando, sem subir e descer)")]
+    public bool snapBodyToGround = true;
+    [Tooltip("Folga entre o ponto mais baixo do corpo e o chão (metros). Se o corpo afundar, suba (0.02); se flutuar, desça (pode ser negativo)")]
+    public float footOffset = 0f;
+
     [Header("Animator (opcional)")]
     [Tooltip("Trigger de morte no Animator. Se o parâmetro não existir, é ignorado.")]
     public string dieTrigger = "Die";
@@ -31,6 +36,10 @@ public class EnemyStatus : MonoBehaviour
 
     public float CurrentLife { get; private set; }
     public bool IsDead { get; private set; }
+
+    private float groundY;
+    private bool snapActive;
+    private SkinnedMeshRenderer[] meshes;
 
     private Animator animator;
     private NavMeshAgent agent;
@@ -135,9 +144,50 @@ public class EnemyStatus : MonoBehaviour
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = false;
 
+        // O Animator pode estar sobrescrevendo a posição do modelo (root motion): desliga
+        if (animator != null)
+            animator.applyRootMotion = false;
+
+        // Descobre onde é o chão (colliders já desligados, então o raio não bate no próprio corpo)
+        if (snapBodyToGround && animator != null)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out hit, 5f, ~0, QueryTriggerInteraction.Ignore))
+                groundY = hit.point.y;
+            else
+                groundY = transform.position.y;
+
+            // Usa a malha visível (o ponto mais baixo do corpo de verdade), não os ossos
+            meshes = animator.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (SkinnedMeshRenderer m in meshes)
+                m.updateWhenOffscreen = true;   // bounds exatos a cada frame
+
+            snapActive = meshes.Length > 0;
+        }
+
         bool hasDeathAnimation = SetTriggerIfExists(dieTrigger);
 
         Destroy(gameObject, hasDeathAnimation ? destroyDelay : destroyDelayWithoutAnimation);
+    }
+
+    // Depois do Animator: mantém o osso mais baixo do corpo encostado no chão
+    void LateUpdate()
+    {
+        if (!snapActive || meshes == null)
+            return;
+
+        float lowest = float.MaxValue;
+        foreach (SkinnedMeshRenderer m in meshes)
+        {
+            if (m != null && m.bounds.min.y < lowest)
+                lowest = m.bounds.min.y;
+        }
+
+        if (lowest == float.MaxValue)
+            return;
+
+        float delta = (groundY + footOffset) - lowest;
+        transform.position += Vector3.up * delta;
     }
 
     // Dispara o trigger só se ele existir no Animator (evita aviso no Console). Retorna true se disparou.
