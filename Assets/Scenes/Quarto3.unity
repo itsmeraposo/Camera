@@ -3139,6 +3139,7 @@ MonoBehaviour:
   footOffset: -0.04
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!54 &427460540
@@ -4370,6 +4371,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!54 &813285406
@@ -6988,6 +6990,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!54 &1614845121

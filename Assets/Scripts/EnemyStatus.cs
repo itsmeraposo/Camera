@@ -29,6 +29,8 @@ public class EnemyStatus : MonoBehaviour
     public string dieTrigger = "Die";
     [Tooltip("Trigger de dano no Animator. Se o parâmetro não existir, é ignorado.")]
     public string hitTrigger = "Hit";
+    [Tooltip("Nome do ESTADO de morte no Animator. Tocado direto na morte, sem depender das transições.")]
+    public string dieState = "Die";
 
     [Header("Sons (índices do AudioController)")]
     public int somDano = 15;
@@ -165,9 +167,32 @@ public class EnemyStatus : MonoBehaviour
             snapActive = meshes.Length > 0;
         }
 
-        bool hasDeathAnimation = SetTriggerIfExists(dieTrigger);
+        bool hasDeathAnimation = PlayDeathAnimation();
 
         Destroy(gameObject, hasDeathAnimation ? destroyDelay : destroyDelayWithoutAnimation);
+    }
+
+    // Toca a morte direto no estado (não depende das transições do Any State)
+    // e limpa o Hit pendente, para ele não atropelar a morte.
+    bool PlayDeathAnimation()
+    {
+        if (animator == null)
+            return false;
+
+        ResetTriggerIfExists(hitTrigger);
+        bool triggered = SetTriggerIfExists(dieTrigger);
+
+        if (!string.IsNullOrEmpty(dieState))
+        {
+            int hash = Animator.StringToHash(dieState);
+            if (animator.HasState(0, hash))
+            {
+                animator.CrossFade(hash, 0.05f, 0, 0f);
+                return true;
+            }
+        }
+
+        return triggered;
     }
 
     // Depois do Animator: mantém o osso mais baixo do corpo encostado no chão
@@ -206,5 +231,20 @@ public class EnemyStatus : MonoBehaviour
         }
 
         return false;
+    }
+
+    void ResetTriggerIfExists(string triggerName)
+    {
+        if (animator == null || string.IsNullOrEmpty(triggerName))
+            return;
+
+        foreach (AnimatorControllerParameter p in animator.parameters)
+        {
+            if (p.type == AnimatorControllerParameterType.Trigger && p.name == triggerName)
+            {
+                animator.ResetTrigger(triggerName);
+                return;
+            }
+        }
     }
 }
