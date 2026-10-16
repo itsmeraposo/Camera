@@ -23,4 +23,30 @@ public class EnemyAnimator : MonoBehaviour
         if (animator != null)
             animator.SetBool(alertParameter, alert);
     }
+
+    // Dispara um Trigger só se ele existir no Animator (sem erro se não existir)
+    public void SetTrigger(string triggerName)
+    {
+        if (Has(triggerName, AnimatorControllerParameterType.Trigger))
+            animator.SetTrigger(triggerName);
+    }
+
+    // Liga/desliga um Bool só se ele existir no Animator
+    public void SetBool(string boolName, bool value)
+    {
+        if (Has(boolName, AnimatorControllerParameterType.Bool))
+            animator.SetBool(boolName, value);
+    }
+
+    bool Has(string paramName, AnimatorControllerParameterType type)
+    {
+        if (animator == null || string.IsNullOrEmpty(paramName))
+            return false;
+
+        foreach (AnimatorControllerParameter p in animator.parameters)
+            if (p.name == paramName && p.type == type)
+                return true;
+
+        return false;
+    }
 }

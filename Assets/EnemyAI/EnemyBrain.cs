@@ -1,5 +1,7 @@
 using UnityEngine;
 
+public enum EnemyType { Melee, Ranged, Charger }
+
 public class EnemyBrain : MonoBehaviour
 {
     [Header("Systems")]
@@ -11,6 +13,10 @@ public class EnemyBrain : MonoBehaviour
     [Header("Behavior")]
     public bool isPatroller = true;
     public float searchTime = 5f;
+
+    [Header("Tipo de inimigo")]
+    [Tooltip("Melee = persegue e bate (Attack). Ranged = mantém distância e atira (RangedAttack). Charger = avisa e investe em linha reta (ChargerAttack).")]
+    public EnemyType type = EnemyType.Melee;
 
     private IEnemyState currentState;
 
@@ -55,6 +61,17 @@ public class EnemyBrain : MonoBehaviour
             ChangeState(new PatrolState(this));
         else
             ChangeState(new WanderState(this));
+    }
+
+    // Estado de perseguição de acordo com o tipo do inimigo
+    public IEnemyState CreateChaseState()
+    {
+        switch (type)
+        {
+            case EnemyType.Ranged:  return new RangedChaseState(this);
+            case EnemyType.Charger: return new ChargerChaseState(this);
+            default:                return new ChaseState(this);
+        }
     }
 
     public bool CanSeePlayer()

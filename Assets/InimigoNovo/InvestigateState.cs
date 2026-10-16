@@ -23,7 +23,7 @@ public class InvestigateState : IEnemyState
         if (enemy.CanSeePlayer())
         {
             enemy.PlayerSeen();
-            enemy.ChangeState(new ChaseState(enemy));
+            enemy.ChangeState(enemy.CreateChaseState());
             return;
         }
 
