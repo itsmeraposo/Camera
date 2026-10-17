@@ -6016,7 +6016,7 @@ MonoBehaviour:
   destroyDelay: 3
   destroyDelayWithoutAnimation: 0.1
   snapBodyToGround: 1
-  footOffset: 0
+  footOffset: -0.01
   dieTrigger: Die
   hitTrigger: Hit
   dieState: Die

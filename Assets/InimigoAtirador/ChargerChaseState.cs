@@ -17,6 +17,8 @@ public class ChargerChaseState : IEnemyState
     private Vector3 dashDirection;
     private float traveled;
     private float recoverDuration;
+    private float lostSightTimer;
+    private const float LoseSightGrace = 1.5f;   // segundos sem ver o rato até desistir e ir procurar
 
     public ChargerChaseState(EnemyBrain enemy)
     {
@@ -31,6 +33,7 @@ public class ChargerChaseState : IEnemyState
         player = enemy.sensor != null ? enemy.sensor.player : null;
         agent = enemy.movement.agent;
         phase = Phase.Chasing;
+        lostSightTimer = 0f;
 
         if (charger == null)
             Debug.LogWarning("[ChargerChaseState] " + enemy.name + " está com Type = Charger mas não tem o script ChargerAttack.");
@@ -53,12 +56,24 @@ public class ChargerChaseState : IEnemyState
     // ---------- Chasing ----------
     void UpdateChasing()
     {
+        // Depois da investida ele costuma ficar de costas pro rato e perde a visão por um instante.
+        // Em vez de desistir na hora (e voltar a patrulhar), vira pro rato e espera um pouco.
         if (!enemy.CanSeePlayer())
         {
-            enemy.ChangeState(new SearchState(enemy));
+            lostSightTimer += Time.deltaTime;
+
+            if (lostSightTimer >= LoseSightGrace)
+            {
+                enemy.ChangeState(new SearchState(enemy));
+                return;
+            }
+
+            enemy.movement.Stop();
+            FaceDirection(FlatDirectionToPlayer(), 6f);
             return;
         }
 
+        lostSightTimer = 0f;
         enemy.SetLastKnownPosition(player.position);
 
         if (charger.CooldownReady && FlatDistance() <= charger.maxChargeDistance)

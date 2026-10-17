@@ -2,14 +2,15 @@ using UnityEngine;
 using UnityEngine.AI;
 
 // Perseguição do inimigo ATIRADOR (EnemyType.Ranged):
-// - longe: anda até a distância ideal
-// - perto demais: recua
-// - na distância certa: para, olha pro player e atira
+// - fora do alcance de tiro: anda até entrar no alcance
+// - dentro do alcance: fica parado, olha pro player e atira
 public class RangedChaseState : IEnemyState
 {
     private EnemyBrain enemy;
     private RangedAttack ranged;
     private Transform player;
+    private float lostSightTimer;
+    private const float LoseSightGrace = 1.2f;   // segundos sem ver o rato até desistir e ir procurar
 
     public RangedChaseState(EnemyBrain enemy)
     {
@@ -22,6 +23,7 @@ public class RangedChaseState : IEnemyState
         enemy.SetAlertAnimation(true);
         enemy.movement.SetChaseSpeed();
         player = enemy.sensor != null ? enemy.sensor.player : null;
+        lostSightTimer = 0f;
 
         if (ranged == null)
             Debug.LogWarning("[RangedChaseState] " + enemy.name + " está com Type = Ranged mas não tem o script RangedAttack.");
@@ -32,12 +34,26 @@ public class RangedChaseState : IEnemyState
         if (player == null || ranged == null)
             return;
 
+        // Perdeu o rato de vista por um instante (visão pisca de perto): não desiste na hora,
+        // senão ele alterna Perseguir <-> Procurar e fica indo pra frente e pra trás.
         if (!enemy.CanSeePlayer())
         {
-            enemy.ChangeState(new SearchState(enemy));
+            lostSightTimer += Time.deltaTime;
+
+            if (lostSightTimer >= LoseSightGrace)
+            {
+                enemy.ChangeState(new SearchState(enemy));
+                return;
+            }
+
+            Vector3 lost = player.position - enemy.transform.position;
+            lost.y = 0f;
+            enemy.movement.Stop();
+            FaceDirection(lost);
             return;
         }
 
+        lostSightTimer = 0f;
         enemy.SetLastKnownPosition(player.position);
 
         Vector3 toPlayer = player.position - enemy.transform.position;
@@ -52,32 +68,20 @@ public class RangedChaseState : IEnemyState
             return;
         }
 
-        // Atira quando está no alcance e o tempo de recarga acabou
-        if (distance <= ranged.shootRange && ranged.CanShoot())
-        {
-            enemy.movement.Stop();
-            FaceDirection(toPlayer);
-            ranged.Shoot(player);
-            return;
-        }
-
-        // Player muito perto: recua
-        if (distance < ranged.retreatDistance)
-        {
-            Retreat(toPlayer);
-            return;
-        }
-
-        // Player longe: aproxima
-        if (distance > ranged.preferredDistance)
+        // Fora do alcance: aproxima só até entrar no alcance de tiro
+        if (distance > ranged.shootRange)
         {
             enemy.movement.MoveTo(player.position);
             return;
         }
 
-        // Distância ideal: espera a recarga olhando pro player
+        // Dentro do alcance: fica PARADO olhando pro rato e atira quando a recarga acabar
+        // (não anda pra frente nem pra trás entre um tiro e outro)
         enemy.movement.Stop();
         FaceDirection(toPlayer);
+
+        if (ranged.CanShoot())
+            ranged.Shoot(player);
     }
 
     void Retreat(Vector3 toPlayer)

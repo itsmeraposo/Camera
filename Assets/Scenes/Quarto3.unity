@@ -1355,6 +1355,8 @@ MonoBehaviour:
   raioFrontal: 0.5
   alturaFrontal: 0.3
   mostrarGizmo: 1
+  atrasoCaixa: 0.15
+  raioExtraMao: 0.1
   debugLogs: 1
 --- !u!1001 &156551744
 PrefabInstance:
@@ -7893,20 +7895,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81d7b53aa49f774a83ebae3674c095c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  comboDamage:
-  - 10
-  - 15
-  - 25
-  comboAnimations:
-  - AnimacaoFaca 0
-  - Ataque2
-  - Ataque3
-  comboDuration:
-  - 1
-  - 1.4
-  - 1
-  comboWindow: 0.8
-  transicaoEntreGolpes: 0.3
+  damage: 10
+  duracaoAtaque: 0.35
+  animacao: AnimacaoFaca 0
+  transicaoAnimacao: 0.1
   sword: {fileID: 0}
 --- !u!114 &1861127518
 MonoBehaviour:
