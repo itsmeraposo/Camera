@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
 
     private bool jogoTerminou = false;
 
+    // Outros scripts (ex.: InGameController) usam isso para saber se a partida já acabou
+    public bool JogoTerminou => jogoTerminou;
+
     void Awake()
     {
         if (Instance == null)
@@ -78,6 +81,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // Esconde o timer enquanto o jogo está pausado (pausa = Time.timeScale 0)
+        if (timerText != null && !jogoTerminou)
+            timerText.enabled = Time.timeScale > 0f;
+
         if (jogoTerminou || !timerAtivo) return;
 
         tempoRestante -= Time.deltaTime;

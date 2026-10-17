@@ -40,6 +40,10 @@ public class InGameController : MonoBehaviour
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            // Vitória/derrota: a partida já acabou, o Esc não pausa nem despausa
+            if (GameManager.Instance != null && GameManager.Instance.JogoTerminou)
+                return;
+
             Pause();
         }
     }

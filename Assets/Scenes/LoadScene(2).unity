@@ -435,6 +435,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &30325437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2252,6 +2263,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &192164855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9269,7 +9291,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.59999996
+  m_VoxelSize: 0.1
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0ced9c6893950494ab66b1cda90be4f8, type: 2}
   m_BuildHeightMesh: 0
@@ -10009,6 +10031,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &881596765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12054,6 +12087,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &1081558875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12406,6 +12450,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &1090948039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13023,13 +13078,13 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1019942371}
+  - {fileID: 96042216}
   - {fileID: 195090453}
-  - {fileID: 1091875921}
   - {fileID: 1097389596}
   - {fileID: 571459202}
   - {fileID: 1848714887}
+  - {fileID: 1091875921}
   - {fileID: 684288684}
-  - {fileID: 96042216}
   - {fileID: 20082867}
   - {fileID: 1613681066}
   m_Father: {fileID: 0}
@@ -13068,6 +13123,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &1147113008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14923,6 +14989,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1311556753}
   - component: {fileID: 1311556752}
+  - component: {fileID: 1311556754}
   m_Layer: 0
   m_Name: Chase
   m_TagString: Untagged
@@ -14958,6 +15025,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &1311556754
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311556751}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1318280281
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17454,6 +17543,13 @@ MonoBehaviour:
     m_Bits: 4294967295
   groundDistance: 0.2
   passoSource: {fileID: 0}
+  indicePassoAndar: 16
+  indicePassoCorrer: 23
+  intervalAndar: 0.5
+  intervalCorrer: 0.3
+  pitchAndar: 0.95
+  pitchCorrer: 1.15
+  variacaoPitch: 0.05
 --- !u!114 &1540034593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17521,6 +17617,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
+  dieTrigger: Die
+  deathDelay: 2.5
+  animator: {fileID: 0}
+  hitTrigger: Hit
+  hitCooldown: 0.4
   useDeathScreen: 0
 --- !u!114 &1540034597
 MonoBehaviour:
@@ -18531,7 +18632,6 @@ Transform:
   - {fileID: 2120312154}
   - {fileID: 879763850}
   - {fileID: 455524268}
-  - {fileID: 570199076}
   - {fileID: 1241091279}
   - {fileID: 1392271488}
   - {fileID: 1351201229}
@@ -18540,6 +18640,7 @@ Transform:
   - {fileID: 1390274288}
   - {fileID: 1994954381}
   - {fileID: 126649314}
+  - {fileID: 570199076}
   - {fileID: 1323447315}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20325,6 +20426,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!114 &1911733659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22329,6 +22441,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7902e9ca6b8aa9043bbb70e0e2db300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatus
+  maxLife: 30
+  stunTime: 0.25
+  destroyDelay: 2
+  destroyDelayWithoutAnimation: 0.1
+  snapBodyToGround: 1
+  footOffset: 0
+  dieTrigger: Die
+  hitTrigger: Hit
+  dieState: Die
+  somDano: 15
+  somMorte: 15
 --- !u!1 &2120312153 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5bef831bd9ffba749b16fd9133686c90, type: 3}

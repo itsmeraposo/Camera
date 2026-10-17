@@ -41,7 +41,15 @@ public class PlayerController : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        if (passoSource == null)
+        audioController = FindObjectOfType<AudioController>();
+
+        // Os passos precisam de um AudioSource SÓ deles. Se dividirem o mesmo AudioSource dos efeitos,
+        // o Stop() dos passos (quando o player para) corta o som do soco e dos outros efeitos.
+        bool dividindoComEfeitos = audioController != null
+            && passoSource != null
+            && passoSource == audioController.efeitoSource;
+
+        if (passoSource == null || dividindoComEfeitos)
         {
             passoSource = gameObject.AddComponent<AudioSource>();
             passoSource.playOnAwake = false;
@@ -49,7 +57,6 @@ public class PlayerController : MonoBehaviour
             passoSource.volume = 0.5f;
         }
 
-        audioController = FindObjectOfType<AudioController>();
         if (audioController != null && audioController.efeitoSource != null)
         {
             passoSource.outputAudioMixerGroup = audioController.efeitoSource.outputAudioMixerGroup;

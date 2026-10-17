@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StatusThings : MonoBehaviour
 {
-    private float life = 10f;
+    private float life = 30f;
 
     public void TakeDamage(float damage)
     {
