@@ -33,6 +33,9 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        // Jogo pausado (menu de pausa, vitória, derrota): cliques na UI não podem atacar
+        if (Time.timeScale == 0f) return;
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
             StartAttack();
     }
