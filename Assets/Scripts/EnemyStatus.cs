@@ -47,6 +47,7 @@ public class EnemyStatus : MonoBehaviour
     private NavMeshAgent agent;
     private EnemyBrain brain;
     private Attack attack;
+    private RangedAttack ranged;
     private EnemyMovement movement;
     private Coroutine stunRoutine;
 
@@ -58,6 +59,7 @@ public class EnemyStatus : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         brain = GetComponent<EnemyBrain>();
         attack = GetComponent<Attack>();
+        ranged = GetComponent<RangedAttack>();
         movement = GetComponent<EnemyMovement>();
     }
 
@@ -132,6 +134,11 @@ public class EnemyStatus : MonoBehaviour
         // Desliga a IA, o ataque e o movimento
         if (brain != null) brain.enabled = false;
         if (attack != null) attack.enabled = false;
+        if (ranged != null)
+        {
+            ranged.CancelAll();      // cancela o arremesso em andamento
+            ranged.enabled = false;
+        }
         if (movement != null) movement.enabled = false;
 
         if (agent != null && agent.enabled)

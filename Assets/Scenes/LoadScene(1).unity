@@ -443,6 +443,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &30325437
@@ -2004,6 +2005,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &192164855
@@ -8992,6 +8994,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &881596765
@@ -10779,6 +10782,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &1081558875
@@ -10952,6 +10956,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &1090948039
@@ -11593,6 +11598,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &1147113008
@@ -15422,20 +15428,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81d7b53aa49f774a83ebae3674c095c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  comboDamage:
-  - 10
-  - 15
-  - 25
-  comboAnimations:
-  - AnimacaoFaca 0
-  - Ataque2
-  - Ataque3
-  comboDuration:
-  - 1
-  - 1.4
-  - 1
-  comboWindow: 0.8
-  transicaoEntreGolpes: 0.3
+  damage: 10
+  duracaoAtaque: 0.35
+  animacao: AnimacaoFaca 0
+  transicaoAnimacao: 0.1
   sword: {fileID: 0}
 --- !u!114 &1540034594
 MonoBehaviour:
@@ -17637,6 +17633,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!114 &1911733659
@@ -19479,6 +19476,7 @@ MonoBehaviour:
   footOffset: 0
   dieTrigger: Die
   hitTrigger: Hit
+  dieState: Die
   somDano: 15
   somMorte: 15
 --- !u!1 &2120312153 stripped
@@ -19855,6 +19853,7 @@ SceneRoots:
   - {fileID: 1026907609}
   - {fileID: 162711597}
   - {fileID: 383427722}
+  - {fileID: 1871051824}
   - {fileID: 1959244271}
   - {fileID: 1907501268}
   - {fileID: 1589619714}
@@ -19862,7 +19861,6 @@ SceneRoots:
   - {fileID: 985706562}
   - {fileID: 1136911524}
   - {fileID: 1666527704}
-  - {fileID: 1871051824}
   - {fileID: 328500388}
   - {fileID: 314817174}
   - {fileID: 572920329}

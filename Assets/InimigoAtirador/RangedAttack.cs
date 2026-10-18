@@ -100,6 +100,13 @@ public class RangedAttack : MonoBehaviour
         IsShooting = false;
     }
 
+    // Chamado pelo EnemyStatus na morte: cancela o arremesso em andamento (a latinha não sai mais)
+    public void CancelAll()
+    {
+        StopAllCoroutines();
+        IsShooting = false;
+    }
+
     // Chamado pelo Animation Event 'ThrowRelease' (via EnemyAnimationEvents)
     public void ThrowRelease()
     {
