@@ -12,6 +12,14 @@ public class GameManager : MonoBehaviour
     public int queijosNecessarios = 3;
     private int queijosColetados = 0;
 
+    [Header("Inimigos")]
+    [Tooltip("Se marcado, além dos queijos é preciso matar todos os inimigos da cena para vencer")]
+    public bool exigirMatarTodos = true;
+    [Tooltip("Opcional: texto separado para o contador de inimigos. Se vazio, o contador aparece na segunda linha do texto dos queijos.")]
+    public TextMeshProUGUI inimigosText;
+    private int inimigosVivos = 0;
+    private bool vitoriaAgendada = false;
+
     [Header("Timer")]
     public float tempoLimite = 180f; // 3 minutos
     private float tempoRestante;
@@ -50,7 +58,8 @@ public class GameManager : MonoBehaviour
 
     private bool jogoTerminou = false;
 
-    // Outros scripts (ex.: InGameController) usam isso para saber se a partida já acabou
+    // ADICIONADO: expõe o estado de fim de jogo para o InGameController (pausa/menu).
+    // Somente leitura — só o próprio GameManager altera esse valor.
     public bool JogoTerminou => jogoTerminou;
 
     void Awake()
@@ -64,6 +73,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         tempoRestante = tempoLimite;
+
+        // Conta os inimigos que existem na cena quando ela começa
+        inimigosVivos = FindObjectsByType<EnemyStatus>(FindObjectsSortMode.None).Length;
 
         if (victoryPanel != null) victoryPanel.SetActive(false);
         if (defeatPanel != null) defeatPanel.SetActive(false);
@@ -81,10 +93,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Esconde o timer enquanto o jogo está pausado (pausa = Time.timeScale 0)
-        if (timerText != null && !jogoTerminou)
-            timerText.enabled = Time.timeScale > 0f;
-
         if (jogoTerminou || !timerAtivo) return;
 
         tempoRestante -= Time.deltaTime;
@@ -122,11 +130,30 @@ public class GameManager : MonoBehaviour
         queijosColetados++;
         AtualizarContadorUI();
 
-        if (queijosColetados >= queijosNecessarios)
-        {
-            FindObjectOfType<AudioController>()?.TocarEfeito(1);
-            StartCoroutine(VitoriaDelay());
-        }
+        VerificarVitoria();
+    }
+
+    // Chamado pelo EnemyStatus quando um inimigo morre (ou some da cena)
+    public void InimigoMorreu()
+    {
+        if (jogoTerminou) return;
+
+        inimigosVivos = Mathf.Max(0, inimigosVivos - 1);
+        AtualizarContadorUI();
+
+        VerificarVitoria();
+    }
+
+    // Vence quando tem queijos suficientes E (se exigido) nenhum inimigo vivo
+    void VerificarVitoria()
+    {
+        if (jogoTerminou || vitoriaAgendada) return;
+        if (queijosColetados < queijosNecessarios) return;
+        if (exigirMatarTodos && inimigosVivos > 0) return;
+
+        vitoriaAgendada = true;
+        FindObjectOfType<AudioController>()?.TocarEfeito(1);
+        StartCoroutine(VitoriaDelay());
     }
 
     IEnumerator VitoriaDelay()
@@ -137,8 +164,26 @@ public class GameManager : MonoBehaviour
 
     void AtualizarContadorUI()
     {
+        string textoQueijos = $"Queijos: {queijosColetados}/{queijosNecessarios}";
+        string textoInimigos = $"Inimigos: {inimigosVivos}";
+
+        // Avisa (cor de alerta) quando já pegou os queijos mas ainda falta matar inimigos
+        bool faltaMatar = exigirMatarTodos && queijosColetados >= queijosNecessarios && inimigosVivos > 0;
+
         if (contadorText != null)
-            contadorText.text = $"Queijos: {queijosColetados}/{queijosNecessarios}";
+        {
+            if (exigirMatarTodos && inimigosText == null)
+                contadorText.text = textoQueijos + "\n" + textoInimigos;
+            else
+                contadorText.text = textoQueijos;
+        }
+
+        if (inimigosText != null)
+        {
+            inimigosText.gameObject.SetActive(exigirMatarTodos);
+            inimigosText.text = textoInimigos;
+            inimigosText.color = faltaMatar ? corAviso : corNormal;
+        }
     }
 
     void AtualizarTimerUI()

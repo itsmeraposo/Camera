@@ -63,6 +63,13 @@ public class EnemyStatus : MonoBehaviour
         movement = GetComponent<EnemyMovement>();
     }
 
+    // Se o inimigo for destruído sem passar por Die() (ex.: Destroy direto), ainda conta como morto
+    void OnDestroy()
+    {
+        if (!IsDead && gameObject.scene.isLoaded && GameManager.Instance != null)
+            GameManager.Instance.InimigoMorreu();
+    }
+
     public void TakeDamage(float damage)
     {
         if (IsDead)
@@ -130,6 +137,10 @@ public class EnemyStatus : MonoBehaviour
         }
 
         FindObjectOfType<AudioController>()?.TocarEfeito(somMorte);
+
+        // Avisa o GameManager (conta para a vitória)
+        if (GameManager.Instance != null)
+            GameManager.Instance.InimigoMorreu();
 
         // Desliga a IA, o ataque e o movimento
         if (brain != null) brain.enabled = false;

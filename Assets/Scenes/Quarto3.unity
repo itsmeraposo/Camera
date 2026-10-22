@@ -17275,6 +17275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   queijosNecessarios: 7
+  exigirMatarTodos: 1
+  inimigosText: {fileID: 0}
   tempoLimite: 180
   ticTacClip: {fileID: 8300000, guid: ffdd52b3ec0e61b40a3c259d0cc623b3, type: 3}
   tempoAlerta: 10
