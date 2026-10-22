@@ -1611,11 +1611,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 9}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &85786722
 GameObject:
   m_ObjectHideFlags: 0
@@ -7369,11 +7371,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 3}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &663404786
 GameObject:
   m_ObjectHideFlags: 0
@@ -7568,11 +7572,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 2, y: 3, z: 2}
   faceUsada: "frente/tr\xE1s (X, Y)"
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &699199893 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5bef831bd9ffba749b16fd9133686c90, type: 3}
@@ -9130,11 +9136,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 14}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &916222857
 GameObject:
   m_ObjectHideFlags: 0
@@ -9262,11 +9270,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 9}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!4 &919074555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: fe114c039322c0943bc4c3d102f0d785, type: 3}
@@ -10954,11 +10964,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 3.1}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &1160743758
 GameObject:
   m_ObjectHideFlags: 0
@@ -11206,11 +11218,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 30, y: 3, z: 0.5}
   faceUsada: "frente/tr\xE1s (X, Y)"
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &1263075976
 GameObject:
   m_ObjectHideFlags: 0
@@ -12563,11 +12577,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 1
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 30, y: 3, z: 0.5}
   faceUsada: "frente/tr\xE1s (X, Y)"
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &1394698976
 GameObject:
   m_ObjectHideFlags: 0
@@ -15241,11 +15257,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TexturaPorMetro
   metrosPorRepeticao: 2
   alturaDaTextura: 3
+  alturaEnterrada: 0
   repeticaoInteira: 1
   inverterVertical: 0
   offset: {x: 0, y: 0}
   tamanhoEmMetros: {x: 0.5, y: 3, z: 14}
   faceUsada: lados (Z, Y)
+  malhaSalva: {x: 1, y: 1, z: 1}
 --- !u!1 &1746258237
 GameObject:
   m_ObjectHideFlags: 0
