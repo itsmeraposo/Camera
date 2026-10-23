@@ -13,6 +13,18 @@ public class EnemyStatus : MonoBehaviour
     [Tooltip("Para o inimigo por um instante quando leva um golpe (0 = não para)")]
     public float stunTime = 0.25f;
 
+    [Header("Knockback")]
+    [Tooltip("Distância (m) que o inimigo é empurrado ao levar um golpe. 0 = não empurra")]
+    public float knockbackDistancia = 0.6f;
+    [Tooltip("Duração (s) do empurrão")]
+    public float knockbackTempo = 0.15f;
+    [Tooltip("Raio do corpo (m) usado para não atravessar paredes quando o inimigo morre empurrado")]
+    public float raioCorpo = 0.4f;
+    [Tooltip("Folga (m) mantida da parede quando o inimigo morre empurrado (espaço para a animação de queda). Se o corpo ainda entrar na parede, aumente.")]
+    public float folgaParede = 0.5f;
+    [Tooltip("Trigger do Animator tocado quando o inimigo é empurrado (no lugar do Hit). Vazio ou inexistente = usa o Hit normal.")]
+    public string knockbackTrigger = "";
+
     [Header("Morte")]
     [Tooltip("Tempo até o corpo sumir (segundos). Dê tempo para a animação de morte tocar.")]
     public float destroyDelay = 2f;
@@ -31,6 +43,10 @@ public class EnemyStatus : MonoBehaviour
     public string hitTrigger = "Hit";
     [Tooltip("Nome do ESTADO de morte no Animator. Tocado direto na morte, sem depender das transições.")]
     public string dieState = "Die";
+    [Tooltip("Nome do ESTADO de dano (Hit) no Animator. Tocado direto ao levar o golpe, sem esperar a transição. Vazio ou inexistente = usa o trigger.")]
+    public string hitState = "Hit";
+    [Tooltip("Tempo (s) da mistura até o Hit. 0 = corta direto para o Hit.")]
+    public float hitCrossFade = 0.05f;
 
     [Header("Sons (índices do AudioController)")]
     public int somDano = 15;
@@ -50,6 +66,7 @@ public class EnemyStatus : MonoBehaviour
     private RangedAttack ranged;
     private EnemyMovement movement;
     private Coroutine stunRoutine;
+    private Coroutine knockbackRoutine;
 
     void Awake()
     {
@@ -72,11 +89,19 @@ public class EnemyStatus : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        TakeDamage(damage, null);
+    }
+
+    // 'origem' = de onde veio o golpe (o inimigo é empurrado para longe dela)
+    public void TakeDamage(float damage, Vector3? origem)
+    {
         if (IsDead)
             return;
 
         CurrentLife -= damage;
         Debug.Log("Inimigo levou " + damage + " de dano. Vida restante: " + CurrentLife);
+
+        bool empurrou = origem.HasValue && Empurrar(origem.Value);
 
         if (CurrentLife <= 0f)
         {
@@ -86,7 +111,9 @@ public class EnemyStatus : MonoBehaviour
 
         FindObjectOfType<AudioController>()?.TocarEfeito(somDano);
 
-        SetTriggerIfExists(hitTrigger);
+        // Se foi empurrado e existe uma animação de knockback, toca ela; senão toca o Hit normal
+        if (!(empurrou && SetTriggerIfExists(knockbackTrigger)))
+            PlayHitAnimation();
 
         if (stunTime > 0f)
         {
@@ -95,6 +122,92 @@ public class EnemyStatus : MonoBehaviour
 
             stunRoutine = StartCoroutine(Stun());
         }
+    }
+
+    // Toca o Hit direto no estado (sem esperar a transição do Any State); reinicia a cada golpe.
+    // Se o estado não existir no Animator, usa o trigger como antes.
+    void PlayHitAnimation()
+    {
+        if (animator == null)
+            return;
+
+        if (!string.IsNullOrEmpty(hitState))
+        {
+            int hash = Animator.StringToHash(hitState);
+            if (animator.HasState(0, hash))
+            {
+                animator.CrossFadeInFixedTime(hash, hitCrossFade, 0, 0f);
+                return;
+            }
+        }
+
+        SetTriggerIfExists(hitTrigger);
+    }
+
+    // Retorna true se o empurrão começou
+    bool Empurrar(Vector3 origem)
+    {
+        if (knockbackDistancia <= 0f || knockbackTempo <= 0f)
+            return false;
+
+        Vector3 dir = transform.position - origem;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.0001f)
+            return false;
+
+        if (knockbackRoutine != null)
+            StopCoroutine(knockbackRoutine);
+
+        knockbackRoutine = StartCoroutine(Knockback(dir.normalized));
+        return true;
+    }
+
+    IEnumerator Knockback(Vector3 dir)
+    {
+        float velocidade = knockbackDistancia / knockbackTempo;
+        float t = 0f;
+
+        while (t < knockbackTempo)
+        {
+            float dt = Time.deltaTime;
+            Vector3 passo = dir * velocidade * dt;
+
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+            {
+                agent.Move(passo);   // o NavMesh já impede de atravessar paredes
+            }
+            else
+            {
+                // Sem agent (ex.: morreu): move direto, então confere a parede antes de cada passo
+                if (BloqueadoPorParede(dir, passo.magnitude))
+                    break;
+
+                transform.position += passo;
+            }
+
+            t += dt;
+            yield return null;
+        }
+
+        knockbackRoutine = null;
+    }
+
+    // Tem algo sólido (parede, outro inimigo, objeto) logo à frente do empurrão?
+    bool BloqueadoPorParede(Vector3 dir, float distancia)
+    {
+        // Esfera na altura do tronco (um pouco acima do chão, para não bater no piso)
+        Vector3 origem = transform.position + Vector3.up * (raioCorpo + 0.2f);
+        RaycastHit[] hits = Physics.SphereCastAll(origem, raioCorpo, dir, distancia + folgaParede, ~0, QueryTriggerInteraction.Ignore);
+
+        foreach (RaycastHit h in hits)
+        {
+            if (h.collider.GetComponentInParent<EnemyStatus>() == this)
+                continue;   // o próprio corpo não conta
+
+            return true;
+        }
+
+        return false;
     }
 
     // Para o inimigo por alguns instantes (cancela ataque em andamento) e depois volta ao normal.

@@ -36,6 +36,18 @@ public class MaoDano : MonoBehaviour
     [Tooltip("Margem extra em volta da mão (metros) ao procurar caixas.")]
     public float raioExtraMao = 0.1f;
 
+    [Header("IMPACTO (só em inimigos)")]
+    [Tooltip("Congela o jogo por este tempo (s, tempo real) quando o soco acerta. 0 = desligado")]
+    public float hitStopDuracao = 0.06f;
+    [Tooltip("Força do tremor de câmera no acerto (metros). 0 = desligado")]
+    public float tremorIntensidade = 0.05f;
+    [Tooltip("Duração do tremor de câmera (s)")]
+    public float tremorDuracao = 0.12f;
+    [Tooltip("Índice do som de acerto no AudioController (12 = Hit). -1 = sem som")]
+    public int somAcerto = 12;
+    [Tooltip("Prefab de partículas criado no ponto do acerto (opcional)")]
+    public GameObject efeitoImpacto;
+
     [Header("Diagnóstico")]
     [Tooltip("Escreve no Console o que a mão encosta e por que o golpe vale ou não. Desligue quando tudo funcionar.")]
     public bool debugLogs = true;
@@ -47,6 +59,7 @@ public class MaoDano : MonoBehaviour
     private readonly Collider[] buffer = new Collider[32];
     private Collider maoCollider;
     private PlayerFlask playerFlask;
+    private AudioController audioController;
     private Transform corpo;   // transform do Player (objeto com o Rigidbody)
 
     void Start()
@@ -141,6 +154,33 @@ public class MaoDano : MonoBehaviour
         }
     }
 
+    // Ponto do alvo mais perto da mão (onde o efeito de impacto aparece)
+    Vector3 PontoDeImpacto(Collider alvo)
+    {
+        Vector3 origem = maoCollider != null ? maoCollider.bounds.center : transform.position;
+        return alvo.bounds.ClosestPoint(origem);
+    }
+
+    // Som, partículas, tremor de câmera e hit stop do acerto
+    void EfeitoAcerto(Vector3 ponto)
+    {
+        if (somAcerto >= 0)
+        {
+            if (audioController == null)
+                audioController = FindObjectOfType<AudioController>();
+            audioController?.TocarEfeito(somAcerto);
+        }
+
+        if (efeitoImpacto != null)
+        {
+            GameObject fx = Instantiate(efeitoImpacto, ponto, Quaternion.identity);
+            Destroy(fx, 2f);
+        }
+
+        CameraShake.Tremer(tremorIntensidade, tremorDuracao);
+        HitStop.Executar(hitStopDuracao);
+    }
+
     void VerificarAlcanceFrontal()
     {
         Collider[] alvos = Physics.OverlapSphere(CentroFrontal(), raioFrontal, ~0, QueryTriggerInteraction.Ignore);
@@ -210,8 +250,12 @@ public class MaoDano : MonoBehaviour
             foreach (Collider c in enemy.GetComponentsInChildren<Collider>())
                 jaAcertou.Add(c);
 
-            enemy.TakeDamage(damage);
+            Vector3 ponto = PontoDeImpacto(other);
+            Transform origemGolpe = corpo != null ? corpo : transform;
+
+            enemy.TakeDamage(damage, origemGolpe.position);
             playerFlask?.OnAcertarInimigo();
+            EfeitoAcerto(ponto);
             return;
         }
 

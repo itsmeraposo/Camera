@@ -8,7 +8,13 @@ public class PlayerController : MonoBehaviour
     public float speed = 6f;
     public float sprintMultiplier = 1.666f;
     public float jumpForce = 5f;
+    [Tooltip("Desmarque para desativar o pulo (nenhum pulo, nem o som)")]
+    public bool pularHabilitado = true;
     public float mouseSensitivity = 0.08f;
+
+    [Header("Ataque")]
+    [Tooltip("Multiplicador da velocidade enquanto o rato soca (1 = não diminui, 0.5 = metade)")]
+    public float velocidadeAoAtacar = 0.5f;
 
     [Header("Ground Check")]
     public LayerMask groundMask = -1;
@@ -34,10 +40,15 @@ public class PlayerController : MonoBehaviour
     private float currentSpeed;
     private float proximoPasso;
     private AudioController audioController;
+    private PlayerAttack playerAttack;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        playerAttack = GetComponentInChildren<PlayerAttack>();
+        if (playerAttack == null)
+            playerAttack = FindObjectOfType<PlayerAttack>();
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
@@ -83,7 +94,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale == 0f) return;
+        if (Time.timeScale == 0f)
+        {
+            // Jogo pausado ou terminado (vitória/derrota): corta o som de passos que ainda estiver tocando
+            if (passoSource != null && passoSource.isPlaying)
+                passoSource.Stop();
+
+            return;
+        }
 
         HandleMouseLook();
         HandleMovementInput();
@@ -166,6 +184,12 @@ public class PlayerController : MonoBehaviour
 
     void HandleJumpInput()
     {
+        if (!pularHabilitado)
+        {
+            jumpRequested = false;
+            return;
+        }
+
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             jumpRequested = true;
     }
@@ -176,6 +200,10 @@ public class PlayerController : MonoBehaviour
             currentSpeed = speed * sprintMultiplier;
         else
             currentSpeed = speed;
+
+        // Mais lento enquanto soca (em vez de deslizar pelo cenário)
+        if (playerAttack != null && playerAttack.EstaAtacando)
+            currentSpeed *= velocidadeAoAtacar;
     }
 
     void CheckGrounded()
@@ -215,7 +243,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
             jumpRequested = false;
 
-            // 🔥 SOM DE PULO (índice 19)
+            //  SOM DE PULO (índice 19)
             audioController?.TocarEfeito(19);
         }
     }
