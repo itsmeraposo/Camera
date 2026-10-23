@@ -14093,7 +14093,6 @@ GameObject:
   - component: {fileID: 1861127516}
   - component: {fileID: 1861127515}
   - component: {fileID: 1861127514}
-  - component: {fileID: 1861127513}
   - component: {fileID: 1861127524}
   m_Layer: 3
   m_Name: Player
@@ -14102,26 +14101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1861127513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861127512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d53e8e88094c1214294d24ddcb33044b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerFlask
-  duracaoEfeito: 15
-  cooldownRecarga: 30
-  curaPorAcerto: 10
-  multiplicadorTamanhoFaca: 2
-  vfxFuria: {fileID: 0}
-  vfxAura: {fileID: 0}
-  flaskStatusText: {fileID: 0}
-  flaskBar: {fileID: 0}
 --- !u!114 &1861127514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14184,8 +14163,8 @@ MonoBehaviour:
   intervaloEntreAtaques: 0.45
   janelaBuffer: 0.25
   segurarParaRepetir: 1
-  duracaoAtaque: 0.35
-  animacao: AnimacaoFaca 0
+  duracaoAtaque: 0.5
+  animacao: 
   transicaoAnimacao: 0.1
   sword: {fileID: 0}
 --- !u!114 &1861127518
@@ -14850,13 +14829,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2ba66a0e5bec1cc458909559ef6c024f, type: 3}
   - {fileID: 8300000, guid: 681aa66552976f141968396354d1dfd0, type: 3}
   - {fileID: 8300000, guid: 8cd8e247046e5014398df695f8c61bea, type: 3}
-  - {fileID: 8300000, guid: 883380ed5ca52164aba09d8a110395b0, type: 3}
-  - {fileID: 8300000, guid: 883380ed5ca52164aba09d8a110395b0, type: 3}
-  - {fileID: 8300000, guid: 69e8cb2569b3d414fbaab322d99828c5, type: 3}
+  - {fileID: 8300000, guid: 3d58fbf558a423640abca2a0c531d910, type: 3}
+  - {fileID: 8300000, guid: 3d58fbf558a423640abca2a0c531d910, type: 3}
+  - {fileID: 8300000, guid: 587a396ba98ce4741baebb1f5a04333d, type: 3}
   - {fileID: 8300000, guid: a189413252d3fc445a233286247db8da, type: 3}
   - {fileID: 8300000, guid: 1db2d4a4a416bbe4c92881e0959d3050, type: 3}
   - {fileID: 8300000, guid: d05224bf4b4044344a7eec24c8f30860, type: 3}
-  - {fileID: 8300000, guid: f307c6708d4dfc747878b78db37f6bc0, type: 3}
+  - {fileID: 8300000, guid: 69e8cb2569b3d414fbaab322d99828c5, type: 3}
   - {fileID: 8300000, guid: dab05fb547422814cb31f3d01c2824aa, type: 3}
   - {fileID: 8300000, guid: 63d085cf6afe1b547a4e3e78c8442b17, type: 3}
   - {fileID: 8300000, guid: b9da788aff3e1d642ba44d23338930ba, type: 3}
