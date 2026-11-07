@@ -7,6 +7,7 @@ using UnityEngine;
 // - O rato empurra a porta (ela gira na dobradiça) e uma mola a fecha devagar.
 // - Inimigos (objetos com EnemyBrain) que chegam perto abrem a porta sozinhos, para o lado oposto a eles.
 //   O NavMeshAgent não empurra objetos físicos, então sem isso eles atravessariam a porta fechada.
+// - Occlusion Portal: aberto enquanto a porta está aberta, fechado quando ela está fechada.
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(HingeJoint))]
 public class PortaHinge : MonoBehaviour
@@ -25,6 +26,12 @@ public class PortaHinge : MonoBehaviour
 
     [Header("Trancada")]
     public bool trancada = false;
+
+    [Header("Occlusion Culling")]
+    [Tooltip("Occlusion Portal da abertura da porta. Se vazio, procura nos filhos do objeto raiz (o Marco). Deve ficar num objeto FIXO, não na folha que gira.")]
+    public OcclusionPortal portalOclusao;
+    [Tooltip("Ângulo (graus) a partir do qual a porta conta como aberta")]
+    public float anguloAbertoMin = 3f;
 
     [Header("Rato (Player) abre a porta")]
     [Tooltip("A porta abre sozinha quando o objeto com a tag Player chega perto. Funciona com qualquer tipo de movimento.")]
@@ -56,7 +63,10 @@ public class PortaHinge : MonoBehaviour
         hinge = GetComponent<HingeJoint>();
         raiz = transform.parent != null ? transform.parent : transform;
 
-                rb.mass = massa;
+        if (portalOclusao == null)
+            portalOclusao = raiz.GetComponentInChildren<OcclusionPortal>(true);
+
+        rb.mass = massa;
         rb.angularDamping = atritoGiro;
         rb.constraints = RigidbodyConstraints.None;   // o HingeJoint já prende a porta; travar a posição impede o giro
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -70,6 +80,7 @@ public class PortaHinge : MonoBehaviour
         hinge.axis = Vector3.up;
 
         Aplicar();
+        AtualizarOclusao();
     }
 
     void OnValidate()
@@ -102,8 +113,19 @@ public class PortaHinge : MonoBehaviour
         Aplicar();
     }
 
+    // Occlusion Portal aberto = porta fora da posição fechada
+    void AtualizarOclusao()
+    {
+        if (portalOclusao == null) return;
+        bool aberta = Mathf.Abs(hinge.angle) > anguloAbertoMin;
+        if (portalOclusao.open != aberta)
+            portalOclusao.open = aberta;
+    }
+
     void FixedUpdate()
     {
+        AtualizarOclusao();
+
         if ((!inimigosAbremPorta && !ratoAbrePorta) || trancada)
             return;
 
