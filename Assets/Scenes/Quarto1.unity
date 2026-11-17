@@ -1786,6 +1786,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7498421830811183723, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 128230476}
+    - targetCorrespondingSourceObject: {fileID: 7498421830811183723, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 128230478}
   m_SourcePrefab: {fileID: 100100000, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
 --- !u!1 &128230475 stripped
 GameObject:
@@ -1802,6 +1805,22 @@ OcclusionPortal:
   m_Open: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_Size: {x: 1.6, y: 5.6, z: 1}
+--- !u!114 &128230478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128230475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bafde92ce8338d4e82402a7e87f6775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PortaOclusao
+  portal: {fileID: 128230476}
+  dobradica: {fileID: 1708877875}
+  anguloMinimo: 10
+  anguloAtual: 0
 --- !u!1 &146038832
 GameObject:
   m_ObjectHideFlags: 0
@@ -11962,6 +11981,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.405006, y: 0.13000008, z: 0.7720002}
   m_Center: {x: 0.0000029802322, y: -0.065, z: 0.14650005}
+--- !u!59 &1708877875 stripped
+HingeJoint:
+  m_CorrespondingSourceObject: {fileID: 2053773041383984413, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
+  m_PrefabInstance: {fileID: 128230474}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1710086826
 PrefabInstance:
   m_ObjectHideFlags: 0

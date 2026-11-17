@@ -2976,6 +2976,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1768741402}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &268021529 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7498421830811183723, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
+  m_PrefabInstance: {fileID: 7172310099510639541}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &270396725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13065,6 +13070,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.413859, y: 3.2833436, z: 2.544386}
   m_Center: {x: -0.0063480735, y: 0.06137474, z: 1.272193}
+--- !u!59 &1654279724 stripped
+HingeJoint:
+  m_CorrespondingSourceObject: {fileID: 2053773041383984413, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
+  m_PrefabInstance: {fileID: 7172310099510639541}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1658996897
 GameObject:
   m_ObjectHideFlags: 0
@@ -16195,13 +16205,32 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6868818868111639366, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1685571324}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7498421830811183723, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7172310099510639543}
   m_SourcePrefab: {fileID: 100100000, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
 --- !u!4 &7172310099510639542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6868818868111639366, guid: a655439bdbdbb7d47a013d637901dbc9, type: 3}
   m_PrefabInstance: {fileID: 7172310099510639541}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7172310099510639543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268021529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bafde92ce8338d4e82402a7e87f6775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PortaOclusao
+  portal: {fileID: 1685571325}
+  dobradica: {fileID: 1654279724}
+  anguloMinimo: 10
+  anguloAtual: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
